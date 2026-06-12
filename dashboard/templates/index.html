@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Vehicle Tracking & Theft Prevention Platform</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet.js Mapping CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Main Glassmorphic Container -->
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-logo-section">
+                <div class="logo-pulse"></div>
+                <h1>IoT VEHICLE TELEMATICS</h1>
+            </div>
+            <div class="header-status-bar">
+                <div id="heartbeat-indicator" class="heartbeat connected"></div>
+                <span id="connection-text" class="status-label">SYSTEM ONLINE</span>
+                <span class="divider">|</span>
+                <span id="time-display" class="time-label">00:00:00</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Layout Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- LEFT PANEL: Status and Actions -->
+            <section class="grid-col panel-left">
+                
+                <!-- Card 1: Telemetry Info -->
+                <div class="glass-card info-card">
+                    <div class="card-header">
+                        <h2>Vehicle Status</h2>
+                        <span id="state-badge" class="badge bg-green">Parked</span>
+                    </div>
+                    <div class="stats-list">
+                        <div class="stat-item">
+                            <span class="label">Latitude</span>
+                            <span id="val-lat" class="val">18.520400</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Longitude</span>
+                            <span id="val-lon" class="val">73.856700</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Current Speed</span>
+                            <span id="val-speed" class="val highlight">0.0 km/h</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">GPS Satellites</span>
+                            <span id="val-sats" class="val">8 Connected</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Last Updated</span>
+                            <span id="val-time" class="val">N/A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Interactive Controls -->
+                <div class="glass-card controls-card">
+                    <div class="card-header">
+                        <h2>Remote Immobilization</h2>
+                    </div>
+                    <div class="action-buttons">
+                        <!-- Relay Override Command -->
+                        <button id="btn-lock" class="btn btn-danger ripple-effect">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            LOCK ENGINE (RELAY CUT-OFF)
+                        </button>
+                        <button id="btn-unlock" class="btn btn-success ripple-effect">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+                            ARM IGNITION (ENABLE ENGINE)
+                        </button>
+                    </div>
+                    <div class="control-toggles">
+                        <div class="toggle-item">
+                            <div class="toggle-text">
+                                <span class="label">System Anti-Theft Arming</span>
+                                <span class="sub-label">Notify owner if motion/vibration is logged</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-arm">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Alert Panel -->
+                <div id="alarm-box" class="glass-card alert-card clean-state">
+                    <div class="alarm-icon-container">
+                        <div class="alert-pulse"></div>
+                        <svg class="alert-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="alert-content">
+                        <h3 id="alert-title">VEHICLE SECURE</h3>
+                        <p id="alert-desc">No active anomalies detected.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER PANEL: Leaflet Map Viewer -->
+            <section class="grid-col panel-center">
+                <div class="glass-card map-card">
+                    <div class="card-header">
+                        <h2>Live Tracking Route</h2>
+                        <div class="map-layers">
+                            <span class="legend-item"><span class="color-dot bg-blue"></span>Geofence Zone</span>
+                            <span class="legend-item"><span class="color-dot bg-green"></span>Vehicle Marker</span>
+                        </div>
+                    </div>
+                    <!-- Map viewport -->
+                    <div id="map-viewport"></div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Geofence Setup & Logging -->
+            <section class="grid-col panel-right">
+                
+                <!-- Card 4: Geofencing Setup -->
+                <div class="glass-card geofence-card">
+                    <div class="card-header">
+                        <h2>Geofence Settings</h2>
+                    </div>
+                    <div class="inputs-grid">
+                        <div class="input-group">
+                            <label for="geo-lat">Center Latitude</label>
+                            <input type="number" id="geo-lat" value="18.5204" step="0.0001">
+                        </div>
+                        <div class="input-group">
+                            <label for="geo-lon">Center Longitude</label>
+                            <input type="number" id="geo-lon" value="73.8567" step="0.0001">
+                        </div>
+                        <div class="input-group full-width">
+                            <label for="geo-radius">Radius (meters)</label>
+                            <input type="number" id="geo-radius" value="150" min="10">
+                        </div>
+                    </div>
+                    <button id="btn-save-geofence" class="btn btn-primary btn-full ripple-effect">
+                        UPDATE GEOFENCE ZONE
+                    </button>
+                </div>
+
+                <!-- Card 5: Real-time Telemetry Charts -->
+                <div class="glass-card chart-card">
+                    <div class="card-header">
+                        <h2>Telemetry Analytics</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="speed-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Card 6: Operations & Reports -->
+                <div class="glass-card reports-card">
+                    <div class="card-header">
+                        <h2>Data Reports</h2>
+                    </div>
+                    <div class="reporting-buttons">
+                        <button id="btn-gen-pdf" class="btn btn-outline ripple-effect">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            COMPILE PDF REPORT
+                        </button>
+                        <button id="btn-download-csv" class="btn btn-outline ripple-effect">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            DOWNLOAD CSV
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- BOTTOM PANEL: Simulator Controller & Logs Console -->
+        <footer class="app-bottom-drawer">
+            <!-- Virtual GPS simulation controls -->
+            <div class="glass-card simulator-card">
+                <div class="card-header">
+                    <h2>Virtual GPS Simulation Control Deck</h2>
+                </div>
+                <div class="simulator-controls">
+                    <button id="sim-route-normal" class="btn btn-sim ripple-effect active">
+                        <span class="btn-dot bg-green"></span>ROUTE A: NORMAL COMMUTE
+                    </button>
+                    <button id="sim-route-parked" class="btn btn-sim ripple-effect">
+                        <span class="btn-dot bg-blue"></span>ROUTE B: PARKED (ARMED)
+                    </button>
+                    <button id="sim-route-theft" class="btn btn-sim ripple-effect">
+                        <span class="btn-dot bg-orange"></span>ROUTE C: VEHICLE THEFT
+                    </button>
+                    <button id="sim-route-escape" class="btn btn-sim ripple-effect">
+                        <span class="btn-dot bg-red"></span>ROUTE D: GEOFENCE ESCAPE
+                    </button>
+                    <button id="sim-route-pune" class="btn btn-sim ripple-effect">
+                        <span class="btn-dot" style="background-color: #a855f7; width: 6px; height: 6px; border-radius: 50%;"></span>ROUTE E: PUNE CITY DRIVE
+                    </button>
+                    
+                    <div class="sim-speed-box">
+                        <span class="label">Update Speed:</span>
+                        <select id="sim-speed-select">
+                            <option value="2000">1x (Every 2s)</option>
+                            <option value="1000" selected>2x (Every 1s)</option>
+                            <option value="500">4x (Every 0.5s)</option>
+                        </select>
+                    </div>
+                    
+                    <button id="btn-clear-logs" class="btn btn-danger btn-sm ripple-effect">CLEAR LOG DATABASE</button>
+                </div>
+            </div>
+
+            <!-- Scrollable telemetry terminal log -->
+            <div class="glass-card console-card">
+                <div class="card-header">
+                    <h2>Live Server Feed Console</h2>
+                </div>
+                <div id="console-terminal" class="terminal-body">
+                    <div class="log-line system">[SYSTEM INITIALIZING] Fetching server logs...</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Leaflet.js Mapping Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Chart.js Data Visualizer -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Dashboard Logic Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

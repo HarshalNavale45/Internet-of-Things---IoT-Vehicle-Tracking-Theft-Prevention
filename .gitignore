@@ -1,0 +1,35 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+db.sqlite3
+
+# Local dynamic data
+data/vehicle_logs.csv
+
+# Local generated reports
+outputs/reports/*.pdf
+outputs/reports/vehicle_history_report.pdf
+
+# IDE directories
+.vscode/
+.idea/
+.project
+.pydevproject
+.settings/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

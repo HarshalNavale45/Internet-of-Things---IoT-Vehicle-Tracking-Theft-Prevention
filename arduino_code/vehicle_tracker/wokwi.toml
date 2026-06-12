@@ -1,0 +1,4 @@
+[wokwi]
+version = 1
+firmware = "vehicle_tracker.ino"
+diagram = "diagram.json"

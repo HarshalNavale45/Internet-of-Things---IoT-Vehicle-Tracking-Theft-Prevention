@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "author": "Antigravity IoT",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-gps", "id": "gps", "top": -160, "left": -150, "attrs": {} },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": -160, "left": 150, "attrs": {} },
+    { "type": "wokwi-led", "id": "led_status", "top": 150, "left": -80, "attrs": { "color": "blue", "label": "Status/WiFi" } },
+    { "type": "wokwi-relay-module", "id": "relay", "top": 150, "left": 80, "attrs": {} },
+    { "type": "wokwi-led", "id": "led_engine", "top": 240, "left": 180, "attrs": { "color": "green", "label": "Engine Ignition" } }
+  ],
+  "connections": [
+    [ "esp:GND.1", "gps:GND", "black", [] ],
+    [ "esp:3V3", "gps:VCC", "red", [] ],
+    [ "esp:16", "gps:TX", "green", [] ],
+    [ "esp:17", "gps:RX", "yellow", [] ],
+
+    [ "esp:GND.2", "buzzer:2", "black", [] ],
+    [ "esp:18", "buzzer:1", "red", [] ],
+
+    [ "esp:GND.2", "led_status:C", "black", [] ],
+    [ "esp:2", "led_status:A", "blue", [] ],
+
+    [ "esp:GND.1", "relay:GND", "black", [] ],
+    [ "esp:5V", "relay:VCC", "red", [] ],
+    [ "esp:19", "relay:IN", "orange", [] ],
+
+    [ "esp:3V3", "relay:COM", "red", [] ],
+    [ "relay:NO", "led_engine:A", "yellow", [] ],
+    [ "esp:GND.2", "led_engine:C", "black", [] ]
+  ],
+  "dependencies": {}
+}

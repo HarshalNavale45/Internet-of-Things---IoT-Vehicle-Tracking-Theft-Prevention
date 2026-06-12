@@ -1,0 +1,682 @@
+/* IoT Vehicle Telematics Premium CSS Theme */
+
+:root {
+    --bg-main: #060913;
+    --bg-card: rgba(15, 23, 42, 0.65);
+    --border-card: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --color-primary: #00f0ff;
+    --color-primary-glow: rgba(0, 240, 255, 0.3);
+    --color-success: #10b981;
+    --color-warning: #f97316;
+    --color-danger: #ff0055;
+    --color-danger-glow: rgba(255, 0, 85, 0.3);
+    --color-blue: #3b82f6;
+    
+    --font-family: 'Outfit', sans-serif;
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --shadow-glow: 0 0 20px var(--color-primary-glow);
+    --shadow-alarm: 0 0 25px var(--color-danger-glow);
+}
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(15, 32, 67, 0.5) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(3, 85, 122, 0.2) 0%, transparent 50%);
+    background-attachment: fixed;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Dashboard Wrapper */
+.dashboard-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 100vh;
+}
+
+/* Header styling */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+}
+
+.header-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-logo-section h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #fff, var(--color-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-pulse {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    box-shadow: var(--shadow-glow);
+    animation: pulse 2s infinite;
+}
+
+.header-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.heartbeat {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.heartbeat.connected {
+    background-color: var(--color-success);
+    box-shadow: 0 0 8px var(--color-success);
+}
+.heartbeat.disconnected {
+    background-color: var(--color-danger);
+    box-shadow: 0 0 8px var(--color-danger);
+    animation: pulse 0.5s infinite;
+}
+
+.time-label {
+    font-family: monospace;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.divider {
+    color: var(--text-muted);
+}
+
+/* Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr 340px;
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.grid-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: var(--transition-normal);
+}
+
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+}
+
+.card-header h2 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-primary);
+}
+
+/* Badges */
+.badge {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+.bg-green { background-color: rgba(16, 185, 129, 0.2); color: var(--color-success); border: 1px solid var(--color-success); }
+.bg-orange { background-color: rgba(249, 115, 22, 0.2); color: var(--color-warning); border: 1px solid var(--color-warning); }
+.bg-red { background-color: rgba(255, 0, 85, 0.2); color: var(--color-danger); border: 1px solid var(--color-danger); }
+.bg-blue { background-color: rgba(59, 130, 246, 0.2); color: var(--color-blue); border: 1px solid var(--color-blue); }
+
+/* Stats List */
+.stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.stat-item .label {
+    color: var(--text-secondary);
+}
+
+.stat-item .val {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.stat-item .val.highlight {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* Controls */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-family);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition-fast);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #020617;
+}
+.btn-primary:hover {
+    box-shadow: var(--shadow-glow);
+    filter: brightness(1.1);
+}
+
+.btn-danger {
+    background-color: rgba(255, 0, 85, 0.1);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+.btn-danger:hover {
+    background-color: var(--color-danger);
+    color: white;
+    box-shadow: var(--shadow-alarm);
+}
+
+.btn-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+}
+.btn-success:hover {
+    background-color: var(--color-success);
+    color: white;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-card);
+}
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--color-primary);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.reporting-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+/* Inputs Form */
+.inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.input-group.full-width {
+    grid-column: span 2;
+}
+
+.input-group label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.input-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-card);
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: white;
+    font-family: var(--font-family);
+    font-size: 0.85rem;
+    transition: var(--transition-fast);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+/* Switch Toggle widget */
+.toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.75rem;
+}
+
+.toggle-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.toggle-text .label {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.toggle-text .sub-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.1);
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: var(--color-primary);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Map viewport */
+.map-card {
+    height: 100%;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+#map-viewport {
+    flex-grow: 1;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1;
+}
+
+.map-layers {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.color-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* Alert System Layout */
+.alert-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-left: 4px solid var(--color-success);
+}
+
+.alert-card.clean-state {
+    border-left-color: var(--color-success);
+}
+
+.alert-card.alarm-state {
+    background: rgba(255, 0, 85, 0.08);
+    border-left-color: var(--color-danger);
+    animation: borderPulse 1.5s infinite;
+}
+
+.alarm-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--color-danger);
+    opacity: 0;
+}
+
+.alarm-state .alert-pulse {
+    animation: ring 1.5s infinite;
+}
+
+.alert-icon {
+    color: var(--color-success);
+    transition: var(--transition-fast);
+}
+
+.alarm-state .alert-icon {
+    color: var(--color-danger);
+    animation: shake 0.5s infinite;
+}
+
+.alert-content h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.alarm-state .alert-content h3 {
+    color: var(--color-danger);
+}
+
+.alert-content p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+/* Telemetry Chart */
+.chart-card {
+    height: calc(100% - 220px);
+}
+.chart-container {
+    position: relative;
+    flex-grow: 1;
+    min-height: 140px;
+    width: 100%;
+}
+
+/* Bottom Drawer Layout */
+.app-bottom-drawer {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+    .app-bottom-drawer {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Simulator controls styling */
+.simulator-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.btn-sim {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    font-family: var(--font-family);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition-fast);
+}
+
+.btn-sim:hover, .btn-sim.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.btn-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.sim-speed-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.sim-speed-box select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-card);
+    padding: 0.35rem;
+    border-radius: 4px;
+    color: white;
+    font-family: var(--font-family);
+    outline: none;
+}
+
+.btn-sm {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.75rem;
+}
+
+/* Live Terminal Log */
+.console-card {
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-body {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    flex-grow: 1;
+    padding: 0.75rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.log-line {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.log-line.system { color: var(--color-primary); }
+.log-line.telemetry { color: var(--text-secondary); }
+.log-line.alert { color: var(--color-danger); font-weight: bold; }
+.log-line.command { color: var(--color-success); }
+
+/* Keyframe Animations */
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+@keyframes ring {
+    0% { transform: scale(0.7); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes borderPulse {
+    0% { border-left-color: var(--color-danger); }
+    50% { border-left-color: transparent; }
+    100% { border-left-color: var(--color-danger); }
+}
+
+@keyframes shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-1px, 1px) rotate(-1deg); }
+    50% { transform: translate(1px, -1px) rotate(1deg); }
+    75% { transform: translate(-1px, -1px) rotate(0deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Pulsing Animation for Vehicle Map Marker alert states */
+.pulse-marker {
+    animation: markerPulseGlow 1.5s infinite;
+}
+
+@keyframes markerPulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+    70% { box-shadow: 0 0 0 14px rgba(255, 0, 85, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+}
+
+/* Smooth marker movement transition */
+.vehicle-map-marker {
+    transition: transform 1s linear !important;
+}
