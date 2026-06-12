@@ -258,20 +258,3 @@ http://127.0.0.1:5000
 > * **Cause:** The ESP32 does not have a valid GPS lock (`gps.location.isValid()` is false).
 > * **Fix:** In Wokwi, ensure the GPS module is active. On real hardware, place the GPS antenna near a window or outdoors to get a clear sky view.
 
----
-
-## 📁 GitHub Portfolio Upload Strategy
-
-Use this strategy to showcase this project to tech recruiters and placement coordinators on GitHub:
-
-### 1. Recommended Repository Settings
-- **Repository Name:** `iot-vehicle-tracking-theft-prevention`
-- **Description:** `Production-grade IoT vehicle telematics platform using ESP32, Python Flask, and Leaflet maps. Features real-time GPS tracking, local Haversine geofencing, remote engine cutoff, and automatic PDF reports.`
-- **GitHub Tags:** `iot`, `esp32`, `python`, `flask`, `leafletjs`, `geofencing`, `telematics`, `embedded-systems`, `sensors`
-
-### 2. Suggested Commit Plan
-- **Commit 1:** `feat: initialize folder structure and documentation guides`
-- **Commit 2:** `feat: add esp32 arduino C++ tracking firmware`
-- **Commit 3:** `feat: build python flask server with telemetry and report generator`
-- **Commit 4:** `feat: create glassmorphic HTML/CSS/JS telemetry dashboard`
-- **Commit 5:** `docs: finalize master README and startup guidelines`
