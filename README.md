@@ -4,6 +4,8 @@ An industry-grade, placement-ready Internet of Things (IoT) project featuring an
 
 This project is designed to act as a **proof of work** in your engineering portfolio, demonstrating full-stack IoT capabilities: embedded development, API routing, geofencing algorithms, mapping visualization, and automated corporate report generation.
 
+![Dashboard Design Mockup](docs/dashboard_mockup.png)
+
 ---
 
 ## 🚀 Key Features
@@ -77,6 +79,7 @@ IoT-Vehicle-Tracking-Theft-Prevention/
 │
 ├── docs/
 │   └── documentation.md             # Complete theory, industry use cases, and 10 interview preparation Q&As
+│   └── dashboard_mockup.png         # Glassmorphic user interface design mockup
 │
 ├── requirements.txt                 # Python libraries list (Flask, reportlab, requests)
 ├── main.py                          # Startup script (starts local Flask server and opens dashboards)
