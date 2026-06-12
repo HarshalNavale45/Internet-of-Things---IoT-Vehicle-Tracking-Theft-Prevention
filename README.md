@@ -103,19 +103,38 @@ If you are building the physical device, connect these components according to t
 You can run the physical microcontroller and sensor hardware virtually using Wokwi!
 
 ### File Locations:
-- **Wokwi configuration:** [wokwi.toml](file:///c:/Users/PC/OneDrive/Desktop/Internet%20of%20Things%20-%20IoT%20Vehicle%20Tracking%20%26%20Theft%20Prevention/arduino_code/vehicle_tracker/wokwi.toml)
-- **Circuit schematic:** [diagram.json](file:///c:/Users/PC/OneDrive/Desktop/Internet%20of%20Things%20-%20IoT%20Vehicle%20Tracking%20%26%20Theft%20Prevention/arduino_code/vehicle_tracker/diagram.json)
+- **Wokwi configuration:** [wokwi.toml](arduino_code/vehicle_tracker/wokwi.toml)
+- **Circuit schematic:** [diagram.json](arduino_code/vehicle_tracker/diagram.json)
 
 ### How to Run:
 1. **Online (Wokwi.com):**
    - Go to the [Wokwi ESP32 Simulator](https://wokwi.com/projects/new/esp32).
-   - Copy the C++ code from [vehicle_tracker.ino](file:///c:/Users/PC/OneDrive/Desktop/Internet%20of%20Things%20-%20IoT%20Vehicle%20Tracking%20%26%20Theft%20Prevention/arduino_code/vehicle_tracker/vehicle_tracker.ino) into the `sketch.ino` editor tab.
-   - Click on the `diagram.json` tab, and paste the contents of our [diagram.json](file:///c:/Users/PC/OneDrive/Desktop/Internet%20of%20Things%20-%20IoT%20Vehicle%20Tracking%20%26%20Theft%20Prevention/arduino_code/vehicle_tracker/diagram.json) file there. The circuit layout (ESP32, Neo-6M GPS, Relay, Buzzer, LED) will automatically connect!
+   - Copy the C++ code from [vehicle_tracker.ino](arduino_code/vehicle_tracker/vehicle_tracker.ino) into the `sketch.ino` editor tab.
+   - Click on the `diagram.json` tab, and paste the contents of our [diagram.json](arduino_code/vehicle_tracker/diagram.json) file there. The circuit layout (ESP32, Neo-6M GPS, Relay, Buzzer, LED) will automatically connect!
    - Click **Start Simulation**.
 2. **Offline (VS Code extension):**
    - Install the **Wokwi Simulator** extension in VS Code.
    - Open the `arduino_code/vehicle_tracker/` folder.
    - Press `F1` and select **Wokwi: Start Simulator**. Wokwi will compile the code and execute the interactive virtual circuit locally!
+
+### ⚠️ Network Configuration (Crucial)
+To let the virtual ESP32 send tracking data to your local dashboard:
+* When you run `python main.py`, note the host IP output in your terminal (e.g., `http://10.170.2.253:5000`).
+* Open `vehicle_tracker.ino` and update `telemetryUrl` to match that IP:
+  ```cpp
+  const char* telemetryUrl = "http://YOUR_LOCAL_IP:5000/api/telemetry";
+  ```
+* If the IP is incorrect or the backend is offline, the firmware's HTTP POST call will hit a **5-second timeout**, which freezes the simulation's main loop and prevents indicators from updating dynamically.
+
+### 💡 LED Bulb Indicator Behavior
+* **Blue Bulb (Status/WiFi - Pin 2):**
+  * **Solid ON:** System is running normally (connected to WiFi with a valid GPS lock).
+  * **Slow Blink (2-sec):** Searching/waiting for a valid GPS signal lock.
+  * **Rapid Blink (100ms):** ALERT! Geofence breach or remote engine cutoff activated.
+* **Green Bulb (Engine Ignition - Relay NO):**
+  * **Solid ON:** Engine is running (Normal state).
+  * **Solid OFF:** Engine cutoff is activated (Theft/Breach state).
+  * *Note: The green bulb is a static power indicator for the ignition circuit and does not flash.*
 
 ---
 
